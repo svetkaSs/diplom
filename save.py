@@ -5,7 +5,7 @@ from moviepy.editor import VideoFileClip
 import os
 import xlwt
 from array import *
-import string
+
 
 
 def save_frame_range_sec(video_path, start_sec, stop_sec, step_sec, dir_path, basename, ext='jpg'):

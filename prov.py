@@ -1,15 +1,15 @@
+import sys
 from fer import FER
 import cv2
 from moviepy.editor import VideoFileClip
 import os
 import openpyxl as ox
 import matplotlib.pyplot as plt
-import csv
-import pandas as pd
-from fer import Video
-import matplotlib
 from moviepy.editor import * #подключаем пакет moviepy
-
+sys.path.append('./esrApp_tst')
+sys.path.append('./esrApp_tst/classificator')
+sys.path.append('./esrApp_tst/level-generation')
+from esrApp_tst.mainEsr import AudioRecognition
 
 
 def save_frame_range_sec(video_path, start_sec, stop_sec, step_sec, dir_path, basename, ext='jpg'):
@@ -34,7 +34,7 @@ def save_frame_range_sec(video_path, start_sec, stop_sec, step_sec, dir_path, ba
 
     fps = cap.get(cv2.CAP_PROP_FPS)
     fps_inv = 1 / fps
-    MyFile = open('output1.txt', 'w')
+    # MyFile = open('output1.txt', 'w')
     sec = start_sec
     while sec < stop_sec:
         n = round(fps * sec)
@@ -59,15 +59,15 @@ def save_frame_range_sec(video_path, start_sec, stop_sec, step_sec, dir_path, ba
             #print( sec)
             sec += step_sec
 
-            MyFile.write(dominant_emmotion)
-            MyFile.write(' ')
-            MyFile.write(str(emotion_score))
-            MyFile.write('\n')
-            ws.cell(row=i, column=1).value = dominant_emmotion
-            ws.cell(row=i, column=2).value = emotion_score
-            ws.cell(row=i, column=3).value=sec
-            i +=1
-            wb.save('./Alg1_01-01-08-02-01-01-21.xlsx')
+            # MyFile.write(dominant_emmotion)
+            # MyFile.write(' ')
+            # MyFile.write(str(emotion_score))
+            # MyFile.write('\n')
+            # ws.cell(row=i, column=1).value = dominant_emmotion
+            # ws.cell(row=i, column=2).value = emotion_score
+            # ws.cell(row=i, column=3).value=sec
+            # i +=1
+            # wb.save('./Alg1_01-01-08-02-01-01-21.xlsx')
 
 
         cv2.imwrite(
@@ -78,17 +78,18 @@ def save_frame_range_sec(video_path, start_sec, stop_sec, step_sec, dir_path, ba
 
             )
 
-video_path="D:/Video_Speech_Actor_21/Actor_21/01-01-08-02-01-01-21.mp4"
+video_path="/home/karakul/diploma/diplom/video-files/01-01-03-02-01-01-13.mp4"
 
 audioclip = AudioFileClip(video_path) #видеофайл 1.mp4
 print (audioclip)
 
-audioclip.write_audiofile("out_audio.wav") #извлеченная аудиодорожка в файл out_audio.mp3
+audioclip.write_audiofile("./output-audio/out_audio.wav") #извлеченная аудиодорожка в файл out_audio.mp3
 
-
+audio_recognition =AudioRecognition('./output-audio/out_audio.wav')
+audio_recognition.getAudioRecognition()
 clip = VideoFileClip(video_path)
 save_frame_range_sec(video_path,0, clip.duration, 0.03,
-                     'D:/data', 'sample_video_img')
+                     './data', 'sample_video_img')
 
 
 
