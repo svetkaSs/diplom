@@ -22,6 +22,10 @@ class Classifier:
         fear_array = client['patterns'][str(level)].find({'emotion': 'fear'})
         self.fear_patterns = [obj['pattern'] for obj in fear_array]
 
+        sadness_array = client['patterns'][str(level)].find({'emotion': 'sadness'})
+        self.sadness_patterns = [obj['pattern'] for obj in sadness_array]
+
+
     def classify(self, input_pattern):
         anger = self.check_min(self.anger_patterns, askii(input_pattern))
         print('Злость:' + str(anger))
@@ -33,7 +37,10 @@ class Classifier:
         print('Отвращение:' + str(disgust))
         fear = self.check_min(self.fear_patterns, askii(input_pattern))
         print('Страх:' + str(fear))
-        return self.find_min_var_name(anger, happyness, calm, disgust, fear)
+        sadness = self.check_min(self.sadness_patterns, askii(input_pattern))
+        print('Грусть:' + str(sadness))
+
+        return self.find_min_var_name(anger, happyness, calm, disgust, fear, sadness)
         
 
     def check_min(self, patterns_array, inputPattern):
@@ -46,7 +53,7 @@ class Classifier:
 
         return (min)
 
-    def find_min_var_name(self, a, b, c, d, e):
+    def find_min_var_name(self, a, b, c, d, e, f):
         smallest = a
         if b < smallest:
             smallest = b
@@ -56,6 +63,8 @@ class Classifier:
             smallest = d
         if e < smallest:
             smallest = e
+        if f < smallest:
+            smallest = f
         if smallest == a:
             return "anger"
         elif smallest == b:
@@ -64,8 +73,10 @@ class Classifier:
             return "calm"
         elif smallest == d:
             return "disgust"
-        else:
+        elif smallest == e:
             return "fear"
+        else:
+            return "sadness"
 
 def askii(text):
     ascii_values = []
